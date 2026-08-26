@@ -22,6 +22,7 @@ public class Dandelion {
                 
                 """;
         String[] tasks = new String[MAX_TASKS];
+        boolean[] isDone = new boolean[MAX_TASKS];
         int taskCount = 0;
 
         System.out.print(banner);
@@ -52,8 +53,34 @@ public class Dandelion {
                     } else {
                         for (int i = 0; i < taskCount; i++) {
                             String linePrefix = i == 0 ? "  bot  › " : "         ";
-                            System.out.println(linePrefix + (i + 1) + ". " + tasks[i]);
+                            String status = isDone[i] ? "[X]" : "[ ]";
+                            System.out.println(linePrefix + (i + 1) + "." + status + " " + tasks[i]);
                         }
+                    }
+                    System.out.println();
+                    continue;
+                }
+
+                if (command.equals("mark") || command.startsWith("mark ")) {
+                    if (taskCount == 0) {
+                        System.out.println("  bot  › No tasks added yet.");
+                        System.out.println();
+                        continue;
+                    }
+
+                    String taskNumberText = command.substring("mark".length()).trim();
+                    try {
+                        int taskNumber = Integer.parseInt(taskNumberText);
+                        if (taskNumber < 1 || taskNumber > taskCount) {
+                            System.out.println("  bot  › Please enter a task number from 1 to " + taskCount + ".");
+                        } else {
+                            int taskIndex = taskNumber - 1;
+                            isDone[taskIndex] = true;
+                            System.out.println("  bot  › Nice! I've marked this task as done:");
+                            System.out.println("           [X] " + tasks[taskIndex]);
+                        }
+                    } catch (NumberFormatException exception) {
+                        System.out.println("  bot  › Please enter a task number after mark.");
                     }
                     System.out.println();
                     continue;
