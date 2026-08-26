@@ -86,6 +86,31 @@ public class Dandelion {
                     continue;
                 }
 
+                if (command.equals("unmark") || command.startsWith("unmark ")) {
+                    if (taskCount == 0) {
+                        System.out.println("  bot  › No tasks added yet.");
+                        System.out.println();
+                        continue;
+                    }
+
+                    String taskNumberText = command.substring("unmark".length()).trim();
+                    try {
+                        int taskNumber = Integer.parseInt(taskNumberText);
+                        if (taskNumber < 1 || taskNumber > taskCount) {
+                            System.out.println("  bot  › Please enter a task number from 1 to " + taskCount + ".");
+                        } else {
+                            int taskIndex = taskNumber - 1;
+                            isDone[taskIndex] = false;
+                            System.out.println("  bot  › OK, I've marked this task as not done yet:");
+                            System.out.println("           [ ] " + tasks[taskIndex]);
+                        }
+                    } catch (NumberFormatException exception) {
+                        System.out.println("  bot  › Please enter a task number after unmark.");
+                    }
+                    System.out.println();
+                    continue;
+                }
+
                 if (taskCount == tasks.length) {
                     System.out.println("  bot  › Task list is full.");
                 } else {
