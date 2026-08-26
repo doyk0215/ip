@@ -24,6 +24,11 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 # Project-specific requirements
 
+## Java coding standards
+
+Follow the rules in [`CODING_STANDARDS.md`](CODING_STANDARDS.md) for all Java
+code added to or changed in this project.
+
 ## Java version:
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.

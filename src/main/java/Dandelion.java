@@ -1,26 +1,49 @@
+import java.util.Scanner;
+
 /**
- * Starts the Dandelion chatbot by showing its greeting and farewell messages.
+ * Runs the Dandelion chatbot's command loop.
  */
 public class Dandelion {
     /**
-     * Displays the chatbot's initial message and then exits.
+     * Echoes commands entered by the user until the user enters {@code bye}.
      *
-     * @param args command-line arguments, which are not used
+     * @param args Command-line arguments, which are not used.
      */
     public static void main(String[] args) {
-        String banner = " ____    _    _   _ ____  _____ _     ___ ___  _   _\n"
-                + "|  _ \\  / \\  | \\ | |  _ \\| ____| |   |_ _/ _ \\| \\ | |\n"
-                + "| | | |/ _ \\ |  \\| | | | |  _| | |    | | | | |  \\| |\n"
-                + "| |_| / ___ \\| |\\  | |_| | |___| |___ | | |_| | |\\  |\n"
-                + "|____/_/   \\_\\_| \\_|____/|_____|_____|___\\___/|_| \\_|\n";
-        String divider = "ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ";
+        String banner = """
+                     .
+                  \\  |  /
+                ――  (✻)  ――
+                     |
+                D A N D E L I O N
+                
+                """;
 
-        System.out.println(divider);
         System.out.print(banner);
-        System.out.println("Welcome, User");
-//        System.out.println("What can I do for you?");
-        System.out.println(divider);
-        System.out.println("Thank you.");
-        System.out.println(divider);
+        System.out.println("  Welcome, User.");
+        System.out.println("  Type anything...");
+        System.out.println();
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (true) {
+                System.out.print("  you  › ");
+                System.out.flush();
+
+                if (!scanner.hasNextLine()) {
+                    System.out.println();
+                    break;
+                }
+
+                String command = scanner.nextLine();
+
+                if (command.equals("bye")) {
+                    System.out.println("  bot  › Bye, User.");
+                    break;
+                }
+
+                System.out.println("  bot  › " + command);
+                System.out.println();
+            }
+        }
     }
 }
