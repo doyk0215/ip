@@ -21,8 +21,7 @@ public class Dandelion {
                 D A N D E L I O N
                 
                 """;
-        String[] tasks = new String[MAX_TASKS];
-        boolean[] isDone = new boolean[MAX_TASKS];
+        Task[] tasks = new Task[MAX_TASKS];
         int taskCount = 0;
 
         System.out.print(banner);
@@ -53,8 +52,7 @@ public class Dandelion {
                     } else {
                         for (int i = 0; i < taskCount; i++) {
                             String linePrefix = i == 0 ? "  bot  › " : "         ";
-                            String status = isDone[i] ? "[X]" : "[ ]";
-                            System.out.println(linePrefix + (i + 1) + "." + status + " " + tasks[i]);
+                            System.out.println(linePrefix + (i + 1) + "." + tasks[i]);
                         }
                     }
                     System.out.println();
@@ -75,9 +73,9 @@ public class Dandelion {
                             System.out.println("  bot  › Please enter a task number from 1 to " + taskCount + ".");
                         } else {
                             int taskIndex = taskNumber - 1;
-                            isDone[taskIndex] = true;
+                            tasks[taskIndex].markAsDone();
                             System.out.println("  bot  › Nice! I've marked this task as done:");
-                            System.out.println("           [X] " + tasks[taskIndex]);
+                            System.out.println("           " + tasks[taskIndex]);
                         }
                     } catch (NumberFormatException exception) {
                         System.out.println("  bot  › Please enter a task number after mark.");
@@ -100,9 +98,9 @@ public class Dandelion {
                             System.out.println("  bot  › Please enter a task number from 1 to " + taskCount + ".");
                         } else {
                             int taskIndex = taskNumber - 1;
-                            isDone[taskIndex] = false;
+                            tasks[taskIndex].markAsNotDone();
                             System.out.println("  bot  › OK, I've marked this task as not done yet:");
-                            System.out.println("           [ ] " + tasks[taskIndex]);
+                            System.out.println("           " + tasks[taskIndex]);
                         }
                     } catch (NumberFormatException exception) {
                         System.out.println("  bot  › Please enter a task number after unmark.");
@@ -114,7 +112,7 @@ public class Dandelion {
                 if (taskCount == tasks.length) {
                     System.out.println("  bot  › Task list is full.");
                 } else {
-                    tasks[taskCount] = command;
+                    tasks[taskCount] = new Task(command);
                     taskCount++;
                     System.out.println("  bot  › added: " + command);
                 }
