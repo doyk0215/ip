@@ -26,8 +26,7 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 ## Java coding standards
 
-Follow the rules in [`CODING_STANDARDS.md`](CODING_STANDARDS.md) for all Java
-code added to or changed in this project.
+Follow the conventions defined in the `seedu-java-coding-standard` skill for all Java code added to or changed in this project.
 
 ## Java version:
 
