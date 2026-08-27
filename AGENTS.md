@@ -34,6 +34,7 @@ Ensure that Java 25 is used when running the application or build tasks. On macO
 
 ## Git
 
-Use lightweight tags unless the user requests an annotated tag.
-When proposing or creating a commit message, include enough detail to explain the rationale for the change.
-Do not commit or push unless explicitly asked.
+* Follow the conventions defined in the `seedu-git-standard` skill for all Git commits (subject line, body formatting, and structure) and branch names in this project.
+* Use lightweight tags unless the user requests an annotated tag.
+* When proposing or creating a commit message, include enough detail to explain the rationale for the change (following the WHAT/WHY principle and standard body structure).
+* Do not commit or push unless explicitly asked.
