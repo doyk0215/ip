@@ -85,7 +85,7 @@ public class Dandelion {
         case "deadline":
         case "event":
             handleTaskCreation(command, commandWord);
-            System.out.println("  Number of tasks: " + taskCount);
+            System.out.println("         Number of tasks: " + taskCount);
             break;
         default:
             handleUnknownCommand(command);
@@ -190,7 +190,7 @@ public class Dandelion {
     }
 
     /**
-     * Treats unrecognised input as a todo task, preserving the original behaviour.
+     * Handles invalid command by showing error message.
      *
      * @param command User input.
      */
@@ -199,7 +199,6 @@ public class Dandelion {
             System.out.println("  bot  › Task list is full.");
             return;
         }
-//        addTask(new Todo(command));
         System.out.println("  bot  › Unknown command.");
     }
 

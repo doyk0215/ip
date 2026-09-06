@@ -40,6 +40,13 @@ public class Parser {
         return new Todo(description);
     }
 
+    /**
+     * Creates a deadline from input such as {@code deadline return book /by Sunday}.
+     *
+     * @param input Deadline command.
+     * @return Parsed deadline.
+     * @throws IllegalArgumentException If the command is missing a description or deadline.
+     */
     public Deadline parseDeadline(String input) {
         String content = input.substring("deadline".length()).trim();
 
@@ -59,6 +66,13 @@ public class Parser {
         return new Deadline(description, by);
     }
 
+    /**
+     * Creates an event from input containing {@code /from} and {@code /to} markers.
+     *
+     * @param input Event command.
+     * @return Parsed event.
+     * @throws IllegalArgumentException If the command is missing a required field.
+     */
     public Event parseEvent(String input) {
         String content = input.substring("event".length()).trim();
 

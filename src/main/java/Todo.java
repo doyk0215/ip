@@ -1,3 +1,6 @@
+/**
+ * Represents a task without a specific deadline or event time.
+ */
 public class Todo extends Task {
 
     /**

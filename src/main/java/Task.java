@@ -1,3 +1,6 @@
+/**
+ * Represents a task that can be marked as done or not done.
+ */
 public abstract class Task {
 
     private final String description;
@@ -5,6 +8,8 @@ public abstract class Task {
 
     /**
      * Creates an incomplete task with the given description.
+     *
+     * @param description Description of the task.
      */
     public Task(String description) {
         this.description = description;
@@ -20,14 +25,21 @@ public abstract class Task {
         return isDone ? "X" : " ";
     }
 
+    /**
+     * Returns the description of this task.
+     *
+     * @return Task description.
+     */
     public String getDescription() {
         return description;
     }
 
+    /** Marks this task as done. */
     public void markAsDone() {
         isDone = true;
     }
 
+    /** Marks this task as not done. */
     public void markAsNotDone() {
         isDone = false;
     }
