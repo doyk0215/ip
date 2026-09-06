@@ -1,17 +1,10 @@
-/**
- * Represents a task that can be marked as done or not done.
- */
-public class Task {
-    /** Description of the work to be completed. */
-    protected String description;
+public abstract class Task {
 
-    /** Whether the task has been completed. */
-    protected boolean isDone;
+    private final String description;
+    private boolean isDone;
 
     /**
      * Creates an incomplete task with the given description.
-     *
-     * @param description Description of the task.
      */
     public Task(String description) {
         this.description = description;
@@ -27,16 +20,14 @@ public class Task {
         return isDone ? "X" : " ";
     }
 
-    /**
-     * Marks this task as done.
-     */
+    public String getDescription() {
+        return description;
+    }
+
     public void markAsDone() {
         isDone = true;
     }
 
-    /**
-     * Marks this task as not done.
-     */
     public void markAsNotDone() {
         isDone = false;
     }
@@ -47,7 +38,5 @@ public class Task {
      * @return Status icon followed by the task description.
      */
     @Override
-    public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
-    }
+    public abstract String toString();
 }
