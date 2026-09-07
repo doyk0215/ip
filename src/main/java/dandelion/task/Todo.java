@@ -1,3 +1,5 @@
+package dandelion.task;
+
 /**
  * Represents a task without a specific deadline or event time.
  */
