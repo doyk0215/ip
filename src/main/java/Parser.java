@@ -85,9 +85,6 @@ public class Parser {
         if (toIndex == -1) {
             throw new IllegalArgumentException("Event must include /to.");
         }
-        if (toIndex <= fromIndex) {
-            throw new IllegalArgumentException("Event must place /from before /to.");
-        }
 
         String description = content.substring(0, fromIndex).trim();
         String from = content.substring(fromIndex + "/from".length(), toIndex).trim();
