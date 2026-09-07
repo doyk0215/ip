@@ -53,7 +53,7 @@ public class Parser {
         int byIndex = content.indexOf("/by");
 
         if (byIndex == -1) {
-            throw new IllegalArgumentException("Deadline must include /by.");
+            throw new IllegalArgumentException("/by is missing.");
         }
 
         String description = content.substring(0, byIndex).trim();
