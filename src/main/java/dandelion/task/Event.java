@@ -1,3 +1,5 @@
+package dandelion.task;
+
 /**
  * Represents a task that takes place during a specified period.
  */

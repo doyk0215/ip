@@ -1,3 +1,9 @@
+package dandelion.parser;
+
+import dandelion.task.Deadline;
+import dandelion.task.Event;
+import dandelion.task.Todo;
+
 /**
  * Parses user commands into application data.
  */
