@@ -113,4 +113,17 @@ public class Storage {
         return task;
     }
 
+    /**
+     * Verifies that a saved task line contains the expected number of fields.
+     *
+     * @param fields Fields extracted from a saved-file line.
+     * @param expectedCount Expected number of fields.
+     * @param taskType Type code from the saved-file line.
+     * @throws IllegalArgumentException If the field count is incorrect.
+     */
+    private void validateFieldCount(String[] fields, int expectedCount, String taskType) {
+        if (fields.length != expectedCount) {
+            throw new IllegalArgumentException("Saved " + taskType + " task has an invalid format.");
+        }
+    }
 }
