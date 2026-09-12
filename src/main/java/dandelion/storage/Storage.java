@@ -78,4 +78,39 @@ public class Storage {
         throw new IllegalArgumentException("Cannot save an unknown task type.");
     }
 
+    /**
+     * Converts one saved-file line to a task.
+     *
+     * @param line Saved-file line to convert.
+     * @return Task represented by {@code line}.
+     * @throws IllegalArgumentException If {@code line} has an invalid format.
+     */
+    private Task convertLineToTask(String line) {
+        String[] fields = line.split("\\|", -1);
+        String taskType = fields[0].trim();
+        Task task = switch (taskType) {
+            case "T" -> {
+                validateFieldCount(fields, 3, taskType);
+                yield new Todo(fields[2].trim());
+            }
+            case "D" -> {
+                validateFieldCount(fields, 4, taskType);
+                yield new Deadline(fields[2].trim(), fields[3].trim());
+            }
+            case "E" -> {
+                validateFieldCount(fields, 5, taskType);
+                yield new Event(fields[2].trim(), fields[3].trim(), fields[4].trim());
+            }
+            default -> throw new IllegalArgumentException("Unknown saved task type: " + taskType + ".");
+        };
+
+        String status = fields[1].trim();
+        if (status.equals("1")) {
+            task.markAsDone();
+        } else if (!status.equals("0")) {
+            throw new IllegalArgumentException("Saved task status must be 0 or 1.");
+        }
+        return task;
+    }
+
 }
