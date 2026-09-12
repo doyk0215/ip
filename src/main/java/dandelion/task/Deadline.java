@@ -17,6 +17,15 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /**
+     * Returns this task's deadline.
+     *
+     * @return Deadline for completing this task.
+     */
+    public String getBy() {
+        return by;
+    }
+
     @Override
     public String toString() {
         return "[D][" + getStatusIcon() + "] "

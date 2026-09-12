@@ -4,9 +4,17 @@ package dandelion.task;
  * Represents a task that can be marked as done or not done.
  */
 public abstract class Task {
-
     private final String description;
     private boolean isDone;
+
+    /**
+     * Returns whether this task is completed.
+     *
+     * @return {@code true} if this task is completed.
+     */
+    public boolean isDone() {
+        return isDone;
+    }
 
     /**
      * Creates an incomplete task with the given description.
