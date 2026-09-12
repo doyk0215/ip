@@ -1,33 +1,47 @@
 package dandelion;
 
 import dandelion.parser.Parser;
+import dandelion.storage.Storage;
 import dandelion.task.Task;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
  * Runs the Dandelion chatbot's command loop.
  */
 public class Dandelion {
-    /** Maximum number of tasks that can be stored during one session. */
+    /**
+     * Maximum number of tasks that can be stored during one session.
+     */
     private static final int MAX_TASKS = 100;
 
-    /** Text displayed when the application starts. */
+    /**
+     * Text displayed when the application starts.
+     */
     private static final String BANNER = """
-                     .
-                  \\  |  /
-                ――  (✻)  ――
-                     |
-                D A N D E L I O N
-                
-                """;
+                 .
+              \\  |  /
+            ――  (✻)  ――
+                 |
+            D A N D E L I O N
 
-    /** Tasks created during the current session. */
+            """;
+
+    /**
+     * Tasks created during the current session.
+     */
     private final Task[] tasks = new Task[MAX_TASKS];
 
-    /** Number of tasks currently stored. */
+    /**
+     * Number of tasks currently stored.
+     */
     private int taskCount;
 
-    /** Converts user input into task objects. */
+
+    /**
+     * Converts user input into task objects.
+     */
     private final Parser parser = new Parser();
 
     /**
@@ -39,7 +53,9 @@ public class Dandelion {
         new Dandelion().run();
     }
 
-    /** Runs the input loop until the user enters {@code bye}. */
+    /**
+     * Runs the input loop until the user enters {@code bye}.
+     */
     private void run() {
         showWelcomeMessage();
 
@@ -57,7 +73,6 @@ public class Dandelion {
                 if (!handleCommand(command)) {
                     break;
                 }
-
                 System.out.println();
             }
         }
@@ -99,7 +114,9 @@ public class Dandelion {
         return true;
     }
 
-    /** Displays the welcome message. */
+    /**
+     * Displays the welcome message.
+     */
     private void showWelcomeMessage() {
         System.out.print(BANNER);
         System.out.println("  Welcome, User.");
@@ -107,12 +124,16 @@ public class Dandelion {
         System.out.println();
     }
 
-    /** Displays the goodbye message. */
+    /**
+     * Displays the goodbye message.
+     */
     private void handleBye() {
         System.out.println("  bot  › Bye, User.");
     }
 
-    /** Displays all stored tasks. */
+    /**
+     * Displays all stored tasks.
+     */
     private void handleList() {
         if (taskCount == 0) {
             System.out.println("  bot  › No tasks added yet.");
@@ -125,12 +146,16 @@ public class Dandelion {
         }
     }
 
-    /** Marks the requested task as done. */
+    /**
+     * Marks the requested task as done.
+     */
     private void handleMark(String command) {
         updateTaskStatus(command, true);
     }
 
-    /** Marks the requested task as not done. */
+    /**
+     * Marks the requested task as not done.
+     */
     private void handleUnmark(String command) {
         updateTaskStatus(command, false);
     }
@@ -171,7 +196,7 @@ public class Dandelion {
     /**
      * Creates and stores a task based on its command type.
      *
-     * @param command Complete user command.
+     * @param command     Complete user command.
      * @param commandWord Command type.
      */
     private void handleTaskCreation(String command, String commandWord) {
