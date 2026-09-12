@@ -38,6 +38,10 @@ public class Dandelion {
      */
     private int taskCount;
 
+    /**
+     * Loads and saves tasks on the hard disk.
+     */
+    private final Storage storage = new Storage();
 
     /**
      * Converts user input into task objects.
@@ -57,6 +61,7 @@ public class Dandelion {
      * Runs the input loop until the user enters {@code bye}.
      */
     private void run() {
+        loadTasks();
         showWelcomeMessage();
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -240,5 +245,19 @@ public class Dandelion {
         tasks[taskCount] = task;
         taskCount++;
         System.out.println("  bot  › added: " + task);
+    }
+
+    /**
+     * Loads saved tasks into the task array when the chatbot starts.
+     */
+    private void loadTasks() {
+        try {
+            for (Task task : storage.loadTasks()) {
+                tasks[taskCount] = task;
+                taskCount++;
+            }
+        } catch (IOException | IllegalArgumentException exception) {
+            System.out.println("  bot  › Unable to load saved tasks: " + exception.getMessage());
+        }
     }
 }
