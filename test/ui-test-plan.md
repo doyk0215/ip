@@ -53,7 +53,7 @@ bye
 **Expected output:**
 
 ```text
-Deadline must include /by.
+/by is missing.
 added: [T][ ] recover after error
 Bye, User.
 ```
@@ -100,5 +100,39 @@ Please enter a task number after the command.
 Please enter a task number from 1 to 1.
 OK, I've marked this task as not done yet:
 [T][ ] submit assignment
+Bye, User.
+```
+
+## Test case: Delete a task and validate its number
+
+**Aim:** Verify that deleting a middle task removes it, renumbers the remaining tasks, and handles invalid task numbers.
+
+**Input:**
+
+```text
+todo first task
+deadline second task /by Friday
+todo third task
+delete 2
+list
+delete 3
+delete abc
+bye
+```
+
+**Expected output:**
+
+```text
+added: [T][ ] first task
+added: [D][ ] second task (by: Friday)
+added: [T][ ] third task
+deleted: [D][ ] second task (by: Friday)
+Number of tasks: 2
+1.[T][ ] first task
+2.[T][ ] third task
+Please enter a task number from 1 to 2.
+Number of tasks: 2
+Please enter a task number after the command.
+Number of tasks: 2
 Bye, User.
 ```

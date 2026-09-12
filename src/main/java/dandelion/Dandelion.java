@@ -2,15 +2,15 @@ package dandelion;
 
 import dandelion.parser.Parser;
 import dandelion.task.Task;
+
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Runs the Dandelion chatbot's command loop.
  */
 public class Dandelion {
-    /** Maximum number of tasks that can be stored during one session. */
-    private static final int MAX_TASKS = 100;
-
     /** Text displayed when the application starts. */
     private static final String BANNER = """
                      .
@@ -22,10 +22,7 @@ public class Dandelion {
                 """;
 
     /** Tasks created during the current session. */
-    private final Task[] tasks = new Task[MAX_TASKS];
-
-    /** Number of tasks currently stored. */
-    private int taskCount;
+    private final ArrayList<Task> tasks = new ArrayList<>();
 
     /** Converts user input into task objects. */
     private final Parser parser = new Parser();
@@ -85,17 +82,20 @@ public class Dandelion {
         case "unmark":
             handleUnmark(command);
             break;
+        case "delete":
+            handleTaskDeletion(command);
+            System.out.println("         Number of tasks: " + tasks.size());
+            break;
         case "todo":
         case "deadline":
         case "event":
             handleTaskCreation(command, commandWord);
-            System.out.println("         Number of tasks: " + taskCount);
+            System.out.println("         Number of tasks: " + tasks.size());
             break;
         default:
             handleUnknownCommand(command);
             break;
         }
-
         return true;
     }
 
@@ -114,14 +114,14 @@ public class Dandelion {
 
     /** Displays all stored tasks. */
     private void handleList() {
-        if (taskCount == 0) {
+        if (tasks.isEmpty()) {
             System.out.println("  bot  › No tasks added yet.");
             return;
         }
 
-        for (int i = 0; i < taskCount; i++) {
+        for (int i = 0; i < tasks.size(); i++) {
             String linePrefix = i == 0 ? "  bot  › " : "         ";
-            System.out.println(linePrefix + (i + 1) + "." + tasks[i]);
+            System.out.println(linePrefix + (i + 1) + "." + tasks.get(i));
         }
     }
 
@@ -142,19 +142,19 @@ public class Dandelion {
      * @param isDone Whether the task should be marked as done.
      */
     private void updateTaskStatus(String command, boolean isDone) {
-        if (taskCount == 0) {
+        if (tasks.isEmpty()) {
             System.out.println("  bot  › No tasks added yet.");
             return;
         }
 
         try {
             int taskNumber = Integer.parseInt(parser.getArgument(command));
-            if (taskNumber < 1 || taskNumber > taskCount) {
-                System.out.println("  bot  › Please enter a task number from 1 to " + taskCount + ".");
+            if (taskNumber < 1 || taskNumber > tasks.size()) {
+                System.out.println("  bot  › Please enter a task number from 1 to " + tasks.size() + ".");
                 return;
             }
 
-            Task task = tasks[taskNumber - 1];
+            Task task = tasks.get(taskNumber - 1);
             if (isDone) {
                 task.markAsDone();
                 System.out.println("  bot  › Nice! I've marked this task as done:");
@@ -168,6 +168,26 @@ public class Dandelion {
         }
     }
 
+    private void handleTaskDeletion(String command) {
+        if (tasks.isEmpty()) {
+            System.out.println("  bot  › No tasks added yet.");
+            return;
+        }
+
+        try {
+            int taskNumber = Integer.parseInt(parser.getArgument(command));
+            if (taskNumber < 1 || taskNumber > tasks.size()) {
+                System.out.println("  bot  › Please enter a task number from 1 to " + tasks.size() + ".");
+                return;
+            }
+            Task deletedTask = tasks.get(taskNumber - 1);
+            deleteTask(taskNumber - 1);
+            System.out.println("  bot  › deleted: " + deletedTask);
+        } catch (NumberFormatException exception) {
+            System.out.println("  bot  › Please enter a task number after the command.");
+        }
+    }
+
     /**
      * Creates and stores a task based on its command type.
      *
@@ -175,11 +195,6 @@ public class Dandelion {
      * @param commandWord Command type.
      */
     private void handleTaskCreation(String command, String commandWord) {
-        if (taskCount == tasks.length) {
-            System.out.println("  bot  › Task list is full.");
-            return;
-        }
-
         try {
             Task task = switch (commandWord) {
             case "todo" -> parser.parseTodo(command);
@@ -199,10 +214,6 @@ public class Dandelion {
      * @param command User input.
      */
     private void handleUnknownCommand(String command) {
-        if (taskCount == tasks.length) {
-            System.out.println("  bot  › Task list is full.");
-            return;
-        }
         System.out.println("  bot  › Unknown command.");
     }
 
@@ -212,8 +223,16 @@ public class Dandelion {
      * @param task Task to add.
      */
     private void addTask(Task task) {
-        tasks[taskCount] = task;
-        taskCount++;
+        tasks.add(task);
         System.out.println("  bot  › added: " + task);
+    }
+
+    /**
+     * Removes and returns the task at the specified zero-based index.
+     *
+     * @param index Zero-based index of the task to remove.
+     */
+    private void deleteTask(int index) {
+        tasks.remove(index);
     }
 }
