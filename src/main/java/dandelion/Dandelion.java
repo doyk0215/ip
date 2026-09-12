@@ -82,6 +82,10 @@ public class Dandelion {
         case "unmark":
             handleUnmark(command);
             break;
+        case "delete":
+            handleTaskDeletion(command);
+            System.out.println("         Number of tasks: " + tasks.size());
+            break;
         case "todo":
         case "deadline":
         case "event":
@@ -221,5 +225,14 @@ public class Dandelion {
     private void addTask(Task task) {
         tasks.add(task);
         System.out.println("  bot  › added: " + task);
+    }
+
+    /**
+     * Removes and returns the task at the specified zero-based index.
+     *
+     * @param index Zero-based index of the task to remove.
+     */
+    private void deleteTask(int index) {
+        tasks.remove(index);
     }
 }
