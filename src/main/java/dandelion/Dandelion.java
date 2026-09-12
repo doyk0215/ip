@@ -187,9 +187,11 @@ public class Dandelion {
             Task task = tasks[taskNumber - 1];
             if (isDone) {
                 task.markAsDone();
+                saveTasks();
                 System.out.println("  bot  › Nice! I've marked this task as done:");
             } else {
                 task.markAsNotDone();
+                saveTasks();
                 System.out.println("  bot  › OK, I've marked this task as not done yet:");
             }
             System.out.println("           " + task);
@@ -244,6 +246,7 @@ public class Dandelion {
     private void addTask(Task task) {
         tasks[taskCount] = task;
         taskCount++;
+        saveTasks();
         System.out.println("  bot  › added: " + task);
     }
 
@@ -252,12 +255,26 @@ public class Dandelion {
      */
     private void loadTasks() {
         try {
+            System.out.println("Loading...");
             for (Task task : storage.loadTasks()) {
                 tasks[taskCount] = task;
                 taskCount++;
             }
+            System.out.println(taskCount + " task(s) successfully loaded.");
         } catch (IOException | IllegalArgumentException exception) {
             System.out.println("  bot  › Unable to load saved tasks: " + exception.getMessage());
+        }
+    }
+
+    /**
+     * Saves the current task list to the data file.
+     */
+    private void saveTasks() {
+        try {
+            storage.saveTasks(tasks, taskCount);
+        } catch (IOException exception) {
+            System.out.println("  bot  › Unable to save tasks: " +
+                    exception.getMessage());
         }
     }
 }
