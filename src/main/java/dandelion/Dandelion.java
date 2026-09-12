@@ -1,9 +1,10 @@
 package dandelion;
 
 import dandelion.parser.Parser;
+import dandelion.storage.Storage;
 import dandelion.task.Task;
 
-import java.sql.Array;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,20 +12,31 @@ import java.util.Scanner;
  * Runs the Dandelion chatbot's command loop.
  */
 public class Dandelion {
-    /** Text displayed when the application starts. */
+    /**
+     * Text displayed when the application starts.
+     */
     private static final String BANNER = """
-                     .
-                  \\  |  /
-                ――  (✻)  ――
-                     |
-                D A N D E L I O N
-                
-                """;
+                 .
+              \\  |  /
+            ――  (✻)  ――
+                 |
+            D A N D E L I O N
 
-    /** Tasks created during the current session. */
+            """;
+
+    /**
+     * Tasks created during the current session.
+     */
     private final ArrayList<Task> tasks = new ArrayList<>();
 
-    /** Converts user input into task objects. */
+    /**
+     * Loads and saves tasks on the hard disk.
+     */
+    private final Storage storage = new Storage();
+
+    /**
+     * Converts user input into task objects.
+     */
     private final Parser parser = new Parser();
 
     /**
@@ -36,8 +48,11 @@ public class Dandelion {
         new Dandelion().run();
     }
 
-    /** Runs the input loop until the user enters {@code bye}. */
+    /**
+     * Runs the input loop until the user enters {@code bye}.
+     */
     private void run() {
+        loadTasks();
         showWelcomeMessage();
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -54,7 +69,6 @@ public class Dandelion {
                 if (!handleCommand(command)) {
                     break;
                 }
-
                 System.out.println();
             }
         }
@@ -99,7 +113,9 @@ public class Dandelion {
         return true;
     }
 
-    /** Displays the welcome message. */
+    /**
+     * Displays the welcome message.
+     */
     private void showWelcomeMessage() {
         System.out.print(BANNER);
         System.out.println("  Welcome, User.");
@@ -107,12 +123,16 @@ public class Dandelion {
         System.out.println();
     }
 
-    /** Displays the goodbye message. */
+    /**
+     * Displays the goodbye message.
+     */
     private void handleBye() {
         System.out.println("  bot  › Bye, User.");
     }
 
-    /** Displays all stored tasks. */
+    /**
+     * Displays all stored tasks.
+     */
     private void handleList() {
         if (tasks.isEmpty()) {
             System.out.println("  bot  › No tasks added yet.");
@@ -125,12 +145,16 @@ public class Dandelion {
         }
     }
 
-    /** Marks the requested task as done. */
+    /**
+     * Marks the requested task as done.
+     */
     private void handleMark(String command) {
         updateTaskStatus(command, true);
     }
 
-    /** Marks the requested task as not done. */
+    /**
+     * Marks the requested task as not done.
+     */
     private void handleUnmark(String command) {
         updateTaskStatus(command, false);
     }
@@ -157,9 +181,11 @@ public class Dandelion {
             Task task = tasks.get(taskNumber - 1);
             if (isDone) {
                 task.markAsDone();
+                saveTasks();
                 System.out.println("  bot  › Nice! I've marked this task as done:");
             } else {
                 task.markAsNotDone();
+                saveTasks();
                 System.out.println("  bot  › OK, I've marked this task as not done yet:");
             }
             System.out.println("           " + task);
@@ -168,6 +194,11 @@ public class Dandelion {
         }
     }
 
+    /**
+     * Deletes the task specified in a delete command.
+     *
+     * @param command User command containing a task number.
+     */
     private void handleTaskDeletion(String command) {
         if (tasks.isEmpty()) {
             System.out.println("  bot  › No tasks added yet.");
@@ -191,7 +222,7 @@ public class Dandelion {
     /**
      * Creates and stores a task based on its command type.
      *
-     * @param command Complete user command.
+     * @param command     Complete user command.
      * @param commandWord Command type.
      */
     private void handleTaskCreation(String command, String commandWord) {
@@ -218,21 +249,55 @@ public class Dandelion {
     }
 
     /**
-     * Adds a task to the task array and confirms the addition.
+     * Adds a task to the task list and confirms the addition.
      *
      * @param task Task to add.
      */
     private void addTask(Task task) {
         tasks.add(task);
+        saveTasks();
         System.out.println("  bot  › added: " + task);
     }
 
     /**
-     * Removes and returns the task at the specified zero-based index.
+     * Removes the task at the specified zero-based index.
      *
      * @param index Zero-based index of the task to remove.
      */
     private void deleteTask(int index) {
         tasks.remove(index);
+        saveTasks();
+    }
+
+    /**
+     * Loads saved tasks into the task list when the chatbot starts.
+     */
+    private void loadTasks() {
+        try {
+            System.out.println("Loading...");
+            for (Task task : storage.loadTasks()) {
+                tasks.add(task);
+            }
+            if (!tasks.isEmpty()) {
+                System.out.println(tasks.size() + " task(s) successfully loaded.");
+            } else {
+                System.out.println("No save data exists.");
+            }
+        } catch (IOException | IllegalArgumentException exception) {
+            System.out.println("  bot  › Unable to load saved tasks: "
+                    + exception.getMessage());
+        }
+    }
+
+    /**
+     * Saves the current task list to the data file.
+     */
+    private void saveTasks() {
+        try {
+            storage.saveTasks(tasks, tasks.size());
+        } catch (IOException exception) {
+            System.out.println("  bot  › Unable to save tasks: "
+                    + exception.getMessage());
+        }
     }
 }
