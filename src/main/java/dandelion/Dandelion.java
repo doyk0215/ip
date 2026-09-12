@@ -164,6 +164,26 @@ public class Dandelion {
         }
     }
 
+    private void handleTaskDeletion(String command) {
+        if (tasks.isEmpty()) {
+            System.out.println("  bot  › No tasks added yet.");
+            return;
+        }
+
+        try {
+            int taskNumber = Integer.parseInt(parser.getArgument(command));
+            if (taskNumber < 1 || taskNumber > tasks.size()) {
+                System.out.println("  bot  › Please enter a task number from 1 to " + tasks.size() + ".");
+                return;
+            }
+            Task deletedTask = tasks.get(taskNumber - 1);
+            deleteTask(taskNumber - 1);
+            System.out.println("  bot  › deleted: " + deletedTask);
+        } catch (NumberFormatException exception) {
+            System.out.println("  bot  › Please enter a task number after the command.");
+        }
+    }
+
     /**
      * Creates and stores a task based on its command type.
      *
