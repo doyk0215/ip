@@ -12,7 +12,10 @@ from pathlib import Path
 
 
 CASE_PATTERN = re.compile(r"^## Test case: (.+)$", re.MULTILINE)
-BLOCK_PATTERN = re.compile(r"\*\*(Input|Expected output):\*\*\s*```(?:text)?\n(.*?)```", re.DOTALL)
+BLOCK_PATTERN = re.compile(
+    r"\*\*(Input|Restart input|Initial data|Expected output):\*\*\s*```(?:text)?\n(.*?)```",
+    re.DOTALL,
+)
 
 
 def parse_test_plan(plan_path: Path) -> list[dict[str, str]]:
@@ -31,6 +34,8 @@ def parse_test_plan(plan_path: Path) -> list[dict[str, str]]:
             )
         if "bye" not in blocks["Input"].splitlines():
             raise ValueError(f"Test case '{heading.group(1)}' must include bye as an input command.")
+        if "Restart input" in blocks and "bye" not in blocks["Restart input"].splitlines():
+            raise ValueError(f"Restart input for '{heading.group(1)}' must include bye as a command.")
         cases.append({"name": heading.group(1), **blocks})
 
     if not cases:
@@ -52,18 +57,48 @@ def compile_application(source_root: Path, output_dir: Path) -> None:
         raise RuntimeError("Compilation failed:\n" + result.stdout + result.stderr)
 
 
-def run_case(case: dict[str, str], classes_dir: Path) -> tuple[str, str, int]:
-    """Run one test case and return its input, output, and exit status."""
-    test_input = case["Input"] + "\n"
+def prepare_case_data(case: dict[str, str], working_dir: Path) -> None:
+    """Write optional initial saved data for one test case."""
+    if "Initial data" not in case:
+        return
+
+    data_file = working_dir / "data" / "dandelion.txt"
+    data_file.parent.mkdir(parents=True)
+    data_file.write_text(case["Initial data"] + "\n", encoding="utf-8")
+
+
+def run_session(test_input: str, classes_dir: Path, working_dir: Path) -> tuple[str, int]:
+    """Run one chatbot session and return its output and exit status."""
     result = subprocess.run(
         ["java", "-cp", str(classes_dir), "dandelion.Dandelion"],
-        input=test_input,
+        input=test_input + "\n",
         capture_output=True,
         text=True,
         timeout=10,
+        cwd=working_dir,
     )
     output = result.stdout + result.stderr
-    return test_input, output, result.returncode
+    return output, result.returncode
+
+
+def run_case(
+    case: dict[str, str],
+    classes_dir: Path,
+    working_dir: Path,
+) -> tuple[str, str, int]:
+    """Run one or two chatbot sessions and return their transcript and exit status."""
+    prepare_case_data(case, working_dir)
+
+    first_input = case["Input"]
+    first_output, first_exit_status = run_session(first_input, classes_dir, working_dir)
+    if first_exit_status != 0 or "Restart input" not in case:
+        return first_input + "\n", first_output, first_exit_status
+
+    restart_input = case["Restart input"]
+    restart_output, restart_exit_status = run_session(restart_input, classes_dir, working_dir)
+    combined_input = "Session 1:\n" + first_input + "\nSession 2:\n" + restart_input + "\n"
+    combined_output = "Session 1:\n" + first_output + "\nSession 2:\n" + restart_output
+    return combined_input, combined_output, restart_exit_status
 
 
 def assert_expected_output(output: str, expected: str) -> None:
@@ -113,7 +148,9 @@ def main() -> int:
 
             for case_number, case in enumerate(cases, start=1):
                 print(f"\n=== Test case {case_number}: {case['name']} ===")
-                test_input, output, exit_status = run_case(case, classes_dir)
+                case_directory = classes_dir / f"case-{case_number}"
+                case_directory.mkdir()
+                test_input, output, exit_status = run_case(case, classes_dir, case_directory)
                 print_transcript(test_input, output)
                 if exit_status != 0:
                     print("TEST FAILED")

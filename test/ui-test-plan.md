@@ -38,6 +38,220 @@ Nice! I've marked this task as done:
 Bye, User.
 ```
 
+## Test case: Persist all task types across a restart
+
+**Aim:** Verify that todo, deadline, and event tasks, including a marked status, are saved and loaded.
+
+**Input:**
+
+```text
+todo read book
+deadline return book /by Sunday
+event team meeting /from Monday 10am /to Monday 11am
+mark 2
+bye
+```
+
+**Restart input:**
+
+```text
+list
+bye
+```
+
+**Expected output:**
+
+```text
+added: [T][ ] read book
+added: [D][ ] return book (by: Sunday)
+added: [E][ ] team meeting (from: Monday 10am to: Monday 11am)
+Nice! I've marked this task as done:
+[D][X] return book (by: Sunday)
+1.[T][ ] read book
+2.[D][X] return book (by: Sunday)
+3.[E][ ] team meeting (from: Monday 10am to: Monday 11am)
+Bye, User.
+```
+
+## Test case: Persist unmarking and deletion across a restart
+
+**Aim:** Verify that an unmarked task and a deleted task are saved correctly.
+
+**Input:**
+
+```text
+todo keep this task
+todo remove this task
+mark 1
+unmark 1
+delete 2
+bye
+```
+
+**Restart input:**
+
+```text
+list
+bye
+```
+
+**Expected output:**
+
+```text
+added: [T][ ] keep this task
+added: [T][ ] remove this task
+Nice! I've marked this task as done:
+OK, I've marked this task as not done yet:
+deleted: [T][ ] remove this task
+1.[T][ ] keep this task
+Bye, User.
+```
+
+## Test case: Handle commands when no tasks exist
+
+**Aim:** Verify that list, mark, unmark, and delete report an empty task list.
+
+**Input:**
+
+```text
+list
+mark 1
+unmark 1
+delete 1
+bye
+```
+
+**Expected output:**
+
+```text
+No tasks added yet.
+No tasks added yet.
+No tasks added yet.
+No tasks added yet.
+Bye, User.
+```
+
+## Test case: Reject malformed task commands
+
+**Aim:** Verify that every parser validation message is shown without ending the session.
+
+**Input:**
+
+```text
+todo
+deadline /by Friday
+deadline return book /by
+event meeting /to 11am
+event meeting /from 10am
+event /from 10am /to 11am
+event meeting /from /to 11am
+event meeting /from 10am /to
+bye
+```
+
+**Expected output:**
+
+```text
+Todo description cannot be empty.
+Both description and deadline are required.
+Both description and deadline are required.
+Event must include /from.
+Event must include /to.
+Description, from, and to cannot be empty.
+Description, from, and to cannot be empty.
+Description, from, and to cannot be empty.
+Bye, User.
+```
+
+## Test case: Handle unknown and blank commands
+
+**Aim:** Verify that unknown and blank commands produce an error and the session continues.
+
+**Input:**
+
+```text
+unknown command
+
+bye
+```
+
+**Expected output:**
+
+```text
+Unknown command.
+Unknown command.
+Bye, User.
+```
+
+## Test case: Reject an unknown saved task type
+
+**Aim:** Verify that an unknown task type in saved data is reported at startup.
+
+**Initial data:**
+
+```text
+X | 0 | unsupported task
+```
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+Unable to load saved tasks: Unknown saved task type: X.
+Bye, User.
+```
+
+## Test case: Reject a saved task with missing fields
+
+**Aim:** Verify that a saved task with too few fields is reported at startup.
+
+**Initial data:**
+
+```text
+T | 0
+```
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+Unable to load saved tasks: Saved T task has an invalid format.
+Bye, User.
+```
+
+## Test case: Reject a saved task with an invalid status
+
+**Aim:** Verify that a saved task status other than 0 or 1 is reported at startup.
+
+**Initial data:**
+
+```text
+T | 2 | read book
+```
+
+**Input:**
+
+```text
+bye
+```
+
+**Expected output:**
+
+```text
+Unable to load saved tasks: Saved task status must be 0 or 1.
+Bye, User.
+```
+
 ## Test case: Reject an invalid deadline and continue
 
 **Aim:** Verify that a missing `/by` marker displays an error without terminating the session.
