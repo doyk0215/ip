@@ -11,5 +11,32 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Stores tasks in and loads tasks from a local text file.
+ */
 public class Storage {
+    /** Location of the task data file, relative to the project root. */
+    private static final Path FILE_PATH = Path.of("data", "dandelion.txt");
+
+    /**
+     * Loads all saved tasks from the data file.
+     *
+     * @return Loaded tasks, or an empty list when no data file exists.
+     * @throws IOException If the data file cannot be read.
+     * @throws IllegalArgumentException If a saved task has an invalid format.
+     */
+    public List<Task> loadTasks() throws IOException {
+        List<Task> tasks = new ArrayList<>();
+        if (!Files.exists(FILE_PATH)) {
+            return tasks;
+        }
+
+        for (String line : Files.readAllLines(FILE_PATH, StandardCharsets.UTF_8)) {
+            if (!line.isBlank()) {
+                tasks.add(convertLineToTask(line));
+            }
+        }
+        return tasks;
+    }
 }
