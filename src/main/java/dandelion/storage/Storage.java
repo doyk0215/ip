@@ -56,4 +56,26 @@ public class Storage {
         Files.createDirectories(FILE_PATH.getParent());
         Files.write(FILE_PATH, lines, StandardCharsets.UTF_8);
     }
+
+    /**
+     * Converts one task to its corresponding saved-file line.
+     *
+     * @param task Task to convert.
+     * @return Saved-file representation of {@code task}.
+     */
+    private String convertTaskToLine(Task task) {
+        String status = task.isDone() ? "1" : "0";
+        if (task instanceof Todo) {
+            return "T | " + status + " | " + task.getDescription();
+        }
+        if (task instanceof Deadline deadline) {
+            return "D | " + status + " | " + deadline.getDescription() + " | " + deadline.getBy();
+        }
+        if (task instanceof Event event) {
+            return "E | " + status + " | " + event.getDescription()
+                    + " | " + event.getFrom() + " | " + event.getTo();
+        }
+        throw new IllegalArgumentException("Cannot save an unknown task type.");
+    }
+
 }
