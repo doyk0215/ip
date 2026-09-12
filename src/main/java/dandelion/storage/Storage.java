@@ -39,4 +39,21 @@ public class Storage {
         }
         return tasks;
     }
+
+    /**
+     * Saves the populated portion of a task array to the data file.
+     *
+     * @param tasks Task array to save.
+     * @param taskCount Number of populated positions in {@code tasks}.
+     * @throws IOException If the data directory or file cannot be written.
+     */
+    public void saveTasks(Task[] tasks, int taskCount) throws IOException {
+        List<String> lines = new ArrayList<>();
+        for (int i = 0; i < taskCount; i++) {
+            lines.add(convertTaskToLine(tasks[i]));
+        }
+
+        Files.createDirectories(FILE_PATH.getParent());
+        Files.write(FILE_PATH, lines, StandardCharsets.UTF_8);
+    }
 }
