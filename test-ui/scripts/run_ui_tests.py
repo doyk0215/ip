@@ -56,7 +56,7 @@ def run_case(case: dict[str, str], classes_dir: Path) -> tuple[str, str, int]:
     """Run one test case and return its input, output, and exit status."""
     test_input = case["Input"] + "\n"
     result = subprocess.run(
-        ["java", "-cp", str(classes_dir), "Dandelion"],
+        ["java", "-cp", str(classes_dir), "dandelion.Dandelion"],
         input=test_input,
         capture_output=True,
         text=True,

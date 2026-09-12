@@ -53,7 +53,7 @@ bye
 **Expected output:**
 
 ```text
-Deadline must include /by.
+/by is missing.
 added: [T][ ] recover after error
 Bye, User.
 ```
