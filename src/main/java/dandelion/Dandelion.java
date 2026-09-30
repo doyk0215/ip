@@ -4,26 +4,14 @@ import dandelion.parser.Parser;
 import dandelion.storage.Storage;
 import dandelion.task.Task;
 import dandelion.task.TaskList;
+import dandelion.ui.Ui;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * Runs the Dandelion chatbot's command loop.
  */
 public class Dandelion {
-    /**
-     * Text displayed when the application starts.
-     */
-    private static final String BANNER = """
-                 .
-              \\  |  /
-            ――  (✻)  ――
-                 |
-            D A N D E L I O N
-
-            """;
-
     /**
      * Tasks created during the current session.
      */
@@ -40,6 +28,11 @@ public class Dandelion {
     private final Parser parser = new Parser();
 
     /**
+     * Handles console input and session-level messages.
+     */
+    private final Ui ui = new Ui();
+
+    /**
      * Starts the chatbot.
      *
      * @param args Command-line arguments, which are not used.
@@ -53,20 +46,12 @@ public class Dandelion {
      */
     private void run() {
         loadTasks();
-        showWelcomeMessage();
+        ui.showWelcomeMessage();
 
-        try (Scanner scanner = new Scanner(System.in)) {
+        try (Ui currentUi = ui) {
             while (true) {
-                System.out.print("  you  › ");
-                System.out.flush();
-
-                if (!scanner.hasNextLine()) {
-                    System.out.println();
-                    break;
-                }
-
-                String command = scanner.nextLine().trim();
-                if (!handleCommand(command)) {
+                String command = currentUi.readCommand();
+                if (command == null || !handleCommand(command)) {
                     break;
                 }
                 System.out.println();
@@ -85,7 +70,7 @@ public class Dandelion {
 
         switch (commandWord) {
         case "bye":
-            handleBye();
+            ui.showGoodbyeMessage();
             return false;
         case "list":
             handleList();
@@ -111,23 +96,6 @@ public class Dandelion {
             break;
         }
         return true;
-    }
-
-    /**
-     * Displays the welcome message.
-     */
-    private void showWelcomeMessage() {
-        System.out.print(BANNER);
-        System.out.println("  Welcome, User.");
-        System.out.println("  Type anything...");
-        System.out.println();
-    }
-
-    /**
-     * Displays the goodbye message.
-     */
-    private void handleBye() {
-        System.out.println("  bot  › Bye, User.");
     }
 
     /**
