@@ -3,9 +3,9 @@ package dandelion;
 import dandelion.parser.Parser;
 import dandelion.storage.Storage;
 import dandelion.task.Task;
+import dandelion.task.TaskList;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -27,7 +27,7 @@ public class Dandelion {
     /**
      * Tasks created during the current session.
      */
-    private final ArrayList<Task> tasks = new ArrayList<>();
+    private final TaskList tasks = new TaskList();
 
     /**
      * Loads and saves tasks on the hard disk.
@@ -294,7 +294,7 @@ public class Dandelion {
      */
     private void saveTasks() {
         try {
-            storage.saveTasks(tasks, tasks.size());
+            storage.saveTasks(tasks);
         } catch (IOException exception) {
             System.out.println("  bot  › Unable to save tasks: "
                     + exception.getMessage());

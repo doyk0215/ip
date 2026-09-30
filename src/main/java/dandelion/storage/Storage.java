@@ -3,6 +3,7 @@ package dandelion.storage;
 import dandelion.task.Deadline;
 import dandelion.task.Event;
 import dandelion.task.Task;
+import dandelion.task.TaskList;
 import dandelion.task.Todo;
 
 import java.io.IOException;
@@ -41,16 +42,15 @@ public class Storage {
     }
 
     /**
-     * Saves the populated portion of a task list to the data file.
+     * Saves a task list to the data file.
      *
      * @param tasks Task list to save.
-     * @param taskCount Number of populated positions in {@code tasks}.
      * @throws IOException If the data directory or file cannot be written.
      */
-    public void saveTasks(ArrayList<Task> tasks, int taskCount) throws IOException {
+    public void saveTasks(TaskList tasks) throws IOException {
         List<String> lines = new ArrayList<>();
-        for (int i = 0; i < taskCount; i++) {
-            lines.add(convertTaskToLine(tasks.get(i)));
+        for (Task task : tasks) {
+            lines.add(convertTaskToLine(task));
         }
 
         Files.createDirectories(FILE_PATH.getParent());
