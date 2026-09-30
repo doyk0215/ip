@@ -73,9 +73,11 @@ public class Ui implements AutoCloseable {
             return;
         }
 
-        for (int i = 0; i < tasks.size(); i++) {
-            String linePrefix = i == 0 ? "  bot  › " : "         ";
-            System.out.println(linePrefix + (i + 1) + "." + tasks.get(i));
+        int taskNumber = 1;
+        for (Task task : tasks) {
+            String linePrefix = taskNumber == 1 ? "  bot  › " : "         ";
+            System.out.println(linePrefix + taskNumber + "." + task);
+            taskNumber++;
         }
     }
 

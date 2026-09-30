@@ -27,22 +27,36 @@ public class TaskList implements Iterable<Task> {
     }
 
     /**
-     * Returns the task at the specified zero-based index.
+     * Marks the task at the specified zero-based index as done.
      *
-     * @param index Zero-based index of the task.
-     * @return Task at {@code index}.
+     * @param index Zero-based index of the task to mark.
+     * @return Updated task.
      */
-    public Task get(int index) {
-        return tasks.get(index);
+    public Task markTask(int index) {
+        Task task = tasks.get(index);
+        task.markAsDone();
+        return task;
+    }
+
+    /**
+     * Marks the task at the specified zero-based index as not done.
+     *
+     * @param index Zero-based index of the task to unmark.
+     * @return Updated task.
+     */
+    public Task unmarkTask(int index) {
+        Task task = tasks.get(index);
+        task.markAsNotDone();
+        return task;
     }
 
     /**
      * Removes and returns the task at the specified zero-based index.
      *
-     * @param index Zero-based index of the task to remove.
-     * @return Removed task.
+     * @param index Zero-based index of the task to delete.
+     * @return Deleted task.
      */
-    public Task remove(int index) {
+    public Task deleteTask(int index) {
         return tasks.remove(index);
     }
 

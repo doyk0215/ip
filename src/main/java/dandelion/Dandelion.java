@@ -131,14 +131,10 @@ public class Dandelion {
                 return;
             }
 
-            Task task = tasks.get(taskNumber - 1);
-            if (isDone) {
-                task.markAsDone();
-                saveTasks();
-            } else {
-                task.markAsNotDone();
-                saveTasks();
-            }
+            Task task = isDone
+                    ? tasks.markTask(taskNumber - 1)
+                    : tasks.unmarkTask(taskNumber - 1);
+            saveTasks();
             ui.showTaskStatusUpdated(task, isDone);
         } catch (NumberFormatException exception) {
             ui.showMissingTaskNumber();
@@ -162,8 +158,8 @@ public class Dandelion {
                 ui.showInvalidTaskNumber(tasks.size());
                 return;
             }
-            Task deletedTask = tasks.get(taskNumber - 1);
-            deleteTask(taskNumber - 1);
+            Task deletedTask = tasks.deleteTask(taskNumber - 1);
+            saveTasks();
             ui.showTaskDeleted(deletedTask);
         } catch (NumberFormatException exception) {
             ui.showMissingTaskNumber();
@@ -199,16 +195,6 @@ public class Dandelion {
         tasks.add(task);
         saveTasks();
         ui.showTaskAdded(task);
-    }
-
-    /**
-     * Removes the task at the specified zero-based index.
-     *
-     * @param index Zero-based index of the task to remove.
-     */
-    private void deleteTask(int index) {
-        tasks.remove(index);
-        saveTasks();
     }
 
     /**
