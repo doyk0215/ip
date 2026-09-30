@@ -3,6 +3,7 @@ package dandelion.ui;
 import dandelion.task.Task;
 import dandelion.task.TaskList;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -18,6 +19,9 @@ public class Ui implements AutoCloseable {
             D A N D E L I O N
 
             """;
+
+    /** Separator used around matching tasks. */
+    private static final String FIND_SEPARATOR = "    " + "_".repeat(60);
 
     /** Reads commands entered through the console. */
     private final Scanner scanner;
@@ -143,6 +147,32 @@ public class Ui implements AutoCloseable {
      */
     public void showTaskDeleted(Task task) {
         showBotMessage("deleted: " + task);
+    }
+
+    /**
+     * Displays tasks whose descriptions match a search keyword.
+     *
+     * @param matchingTasks Tasks to display.
+     */
+    public void showMatchingTasks(List<Task> matchingTasks) {
+        if (matchingTasks.isEmpty()) {
+            showBotMessage("No matching tasks found.");
+            return;
+        }
+
+        System.out.println(FIND_SEPARATOR);
+        System.out.println("     Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            System.out.println("     " + (i + 1) + "." + matchingTasks.get(i));
+        }
+        System.out.println(FIND_SEPARATOR);
+    }
+
+    /**
+     * Displays a missing-search-keyword message.
+     */
+    public void showMissingSearchKeyword() {
+        showBotMessage("Please enter a keyword after the command.");
     }
 
     /**

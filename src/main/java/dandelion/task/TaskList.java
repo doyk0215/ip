@@ -2,6 +2,8 @@ package dandelion.task;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Stores and manages the tasks created during a Dandelion session.
@@ -58,6 +60,24 @@ public class TaskList implements Iterable<Task> {
      */
     public Task deleteTask(int index) {
         return tasks.remove(index);
+    }
+
+    /**
+     * Returns tasks whose descriptions contain the specified keyword.
+     * Matching ignores letter case.
+     *
+     * @param keyword Keyword to search for.
+     * @return Matching tasks in their original insertion order.
+     */
+    public List<Task> findTasks(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        List<Task> matchingTasks = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
+                matchingTasks.add(task);
+            }
+        }
+        return matchingTasks;
     }
 
     /**

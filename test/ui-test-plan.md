@@ -350,3 +350,34 @@ Please enter a task number after the command.
 Number of tasks: 2
 Bye, User.
 ```
+
+## Test case: Find tasks by description keyword
+
+**Aim:** Verify that find displays matching task descriptions with the requested formatting.
+
+**Input:**
+
+```text
+todo read book
+deadline return book /by June 6th
+todo attend class
+mark 1
+mark 2
+find book
+bye
+```
+
+**Expected output:**
+
+```text
+added: [T][ ] read book
+added: [D][ ] return book (by: June 6th)
+Nice! I've marked this task as done:
+Nice! I've marked this task as done:
+    ____________________________________________________________
+     Here are the matching tasks in your list:
+     1.[T][X] read book
+     2.[D][X] return book (by: June 6th)
+    ____________________________________________________________
+Bye, User.
+```

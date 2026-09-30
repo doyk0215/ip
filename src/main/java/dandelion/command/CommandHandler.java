@@ -71,6 +71,9 @@ public class CommandHandler {
             handleTaskCreation(command, commandWord);
             ui.showTaskCount(tasks.size());
             break;
+        case "find":
+            handleFind(command);
+            break;
         default:
             ui.showUnknownCommand();
             break;
@@ -168,6 +171,20 @@ public class CommandHandler {
         } catch (IllegalArgumentException exception) {
             ui.showError(exception.getMessage());
         }
+    }
+
+    /**
+     * Finds tasks whose descriptions contain the requested keyword.
+     *
+     * @param command User command containing a search keyword.
+     */
+    private void handleFind(String command) {
+        String keyword = parser.getArgument(command);
+        if (keyword.isEmpty()) {
+            ui.showMissingSearchKeyword();
+            return;
+        }
+        ui.showMatchingTasks(tasks.findTasks(keyword));
     }
 
     /**

@@ -29,7 +29,11 @@ public class Parser {
      * @return Command argument.
      */
     public String getArgument(String input) {
-        return input.substring(input.indexOf(' ') + 1).trim();
+        int separatorIndex = input.indexOf(' ');
+        if (separatorIndex == -1) {
+            return "";
+        }
+        return input.substring(separatorIndex + 1).trim();
     }
 
     /**
