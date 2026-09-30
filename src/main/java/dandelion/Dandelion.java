@@ -14,6 +14,12 @@ import java.io.IOException;
  */
 public class Dandelion {
     /**
+     * Creates a Dandelion chatbot with its default collaborators.
+     */
+    public Dandelion() {
+    }
+
+    /**
      * Tasks created during the current session.
      */
     private final TaskList tasks = new TaskList();

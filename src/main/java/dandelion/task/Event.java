@@ -38,6 +38,11 @@ public class Event extends Task {
         return to;
     }
 
+    /**
+     * Returns this event task in display-ready format.
+     *
+     * @return Display-ready event representation.
+     */
     @Override
     public String toString() {
         return "[E][" + getStatusIcon() + "] "

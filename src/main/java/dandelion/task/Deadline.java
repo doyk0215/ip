@@ -26,6 +26,11 @@ public class Deadline extends Task {
         return by;
     }
 
+    /**
+     * Returns this deadline task in display-ready format.
+     *
+     * @return Display-ready deadline representation.
+     */
     @Override
     public String toString() {
         return "[D][" + getStatusIcon() + "] "

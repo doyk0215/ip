@@ -10,6 +10,12 @@ import dandelion.task.Todo;
 public class Parser {
 
     /**
+     * Creates a command parser.
+     */
+    public Parser() {
+    }
+
+    /**
      * Extracts the first word from a command.
      *
      * @param input User command.

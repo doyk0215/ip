@@ -21,6 +21,12 @@ public class Storage {
     private static final Path FILE_PATH = Path.of("data", "dandelion.txt");
 
     /**
+     * Creates storage for the default task data file.
+     */
+    public Storage() {
+    }
+
+    /**
      * Loads all saved tasks from the data file.
      *
      * @return Loaded tasks, or an empty list when no data file exists.

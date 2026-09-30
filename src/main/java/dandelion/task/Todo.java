@@ -14,6 +14,11 @@ public class Todo extends Task {
         super(description);
     }
 
+    /**
+     * Returns this todo task in display-ready format.
+     *
+     * @return Display-ready todo representation.
+     */
     @Override
     public String toString() {
         return "[T][" + getStatusIcon() + "] " + getDescription();
