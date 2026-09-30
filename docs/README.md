@@ -164,5 +164,3 @@ mark abc
 find
   bot  › Please enter a keyword after the command.
 ```
-
-For the complete behavior checklist, see the [UI test plan](../test/ui-test-plan.md).
