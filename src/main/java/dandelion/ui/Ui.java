@@ -1,5 +1,8 @@
 package dandelion.ui;
 
+import dandelion.task.Task;
+import dandelion.task.TaskList;
+
 import java.util.Scanner;
 
 /**
@@ -60,10 +63,164 @@ public class Ui implements AutoCloseable {
     }
 
     /**
+     * Displays all tasks in their insertion order.
+     *
+     * @param tasks Tasks to display.
+     */
+    public void showTaskList(TaskList tasks) {
+        if (tasks.isEmpty()) {
+            showNoTasksMessage();
+            return;
+        }
+
+        for (int i = 0; i < tasks.size(); i++) {
+            String linePrefix = i == 0 ? "  bot  › " : "         ";
+            System.out.println(linePrefix + (i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    /**
+     * Displays that no tasks are available.
+     */
+    public void showNoTasksMessage() {
+        showBotMessage("No tasks added yet.");
+    }
+
+    /**
+     * Displays the number of tasks currently stored.
+     *
+     * @param taskCount Number of tasks.
+     */
+    public void showTaskCount(int taskCount) {
+        System.out.println("         Number of tasks: " + taskCount);
+    }
+
+    /**
+     * Displays an invalid task-number message.
+     *
+     * @param taskCount Largest valid task number.
+     */
+    public void showInvalidTaskNumber(int taskCount) {
+        showBotMessage("Please enter a task number from 1 to " + taskCount + ".");
+    }
+
+    /**
+     * Displays a missing task-number message.
+     */
+    public void showMissingTaskNumber() {
+        showBotMessage("Please enter a task number after the command.");
+    }
+
+    /**
+     * Displays a task after updating its completion status.
+     *
+     * @param task Task whose status was updated.
+     * @param isDone Whether the task is now marked as done.
+     */
+    public void showTaskStatusUpdated(Task task, boolean isDone) {
+        String message = isDone
+                ? "Nice! I've marked this task as done:"
+                : "OK, I've marked this task as not done yet:";
+        showBotMessage(message);
+        System.out.println("           " + task);
+    }
+
+    /**
+     * Displays a task-creation confirmation.
+     *
+     * @param task Task that was added.
+     */
+    public void showTaskAdded(Task task) {
+        showBotMessage("added: " + task);
+    }
+
+    /**
+     * Displays a task-deletion confirmation.
+     *
+     * @param task Task that was deleted.
+     */
+    public void showTaskDeleted(Task task) {
+        showBotMessage("deleted: " + task);
+    }
+
+    /**
+     * Displays an error message returned by command processing.
+     *
+     * @param message Error message.
+     */
+    public void showError(String message) {
+        showBotMessage(message);
+    }
+
+    /**
+     * Displays an unknown-command message.
+     */
+    public void showUnknownCommand() {
+        showBotMessage("Unknown command.");
+    }
+
+    /**
+     * Displays the loading status.
+     */
+    public void showLoading() {
+        System.out.println("Loading...");
+    }
+
+    /**
+     * Displays the number of tasks loaded from storage.
+     *
+     * @param taskCount Number of loaded tasks.
+     */
+    public void showLoadedTaskCount(int taskCount) {
+        System.out.println(taskCount + " task(s) successfully loaded.");
+    }
+
+    /**
+     * Displays that no saved task data exists.
+     */
+    public void showNoSaveData() {
+        System.out.println("No save data exists.");
+    }
+
+    /**
+     * Displays a saved-task loading error.
+     *
+     * @param message Error message.
+     */
+    public void showLoadingError(String message) {
+        showBotMessage("Unable to load saved tasks: " + message);
+    }
+
+    /**
+     * Displays a task-saving error.
+     *
+     * @param message Error message.
+     */
+    public void showSavingError(String message) {
+        showBotMessage("Unable to save tasks: " + message);
+    }
+
+    /**
+     * Displays spacing between command responses.
+     */
+    public void showCommandSeparator() {
+        System.out.println();
+    }
+
+    /**
      * Closes the console input source.
      */
     @Override
     public void close() {
         scanner.close();
+    }
+
+    /**
+     * Displays a bot message with the standard output prefix.
+     *
+     * @param message Message to display.
+     */
+    private void showBotMessage(String message) {
+        System.out.println("  bot  › " + message);
     }
 }
