@@ -48,7 +48,7 @@ The generated `-all.jar` includes the application's runtime dependencies.
 | Command | Format | Description |
 | --- | --- | --- |
 | `todo` | `todo DESCRIPTION` | Adds a task without a deadline or time period. |
-| `deadline` | `deadline DESCRIPTION /by DEADLINE` | Adds a task with a deadline. |
+| `deadline` | `deadline DESCRIPTION /by yyyy-MM-dd` | Adds a task with a date deadline. |
 | `event` | `event DESCRIPTION /from START /to END` | Adds a task with a time period. |
 | `list` | `list` | Displays all tasks. |
 | `mark` | `mark NUMBER` | Marks a task as done. |

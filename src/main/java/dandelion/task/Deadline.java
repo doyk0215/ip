@@ -1,10 +1,19 @@
 package dandelion.task;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 /**
  * Represents a task that has a deadline.
  */
 public class Deadline extends Task {
-    private final String by;
+    /** Format used to display deadline dates to the user. */
+    private static final DateTimeFormatter DISPLAY_FORMAT =
+            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
+
+    /** Date by which the task should be completed. */
+    private final LocalDate by;
 
     /**
      * Creates an incomplete deadline task.
@@ -12,7 +21,7 @@ public class Deadline extends Task {
      * @param description Description of the task.
      * @param by Deadline for completing the task.
      */
-    public Deadline(String description, String by) {
+    public Deadline(String description, LocalDate by) {
         super(description);
         this.by = by;
     }
@@ -22,7 +31,7 @@ public class Deadline extends Task {
      *
      * @return Deadline for completing this task.
      */
-    public String getBy() {
+    public LocalDate getBy() {
         return by;
     }
 
@@ -34,6 +43,6 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         return "[D][" + getStatusIcon() + "] "
-                + getDescription() + " (by: " + by + ")";
+                + getDescription() + " (by: " + by.format(DISPLAY_FORMAT) + ")";
     }
 }
