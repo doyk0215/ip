@@ -31,7 +31,7 @@ To build and run the executable JAR instead:
 
 ```bash
 ./gradlew shadowJar
-java -jar build/libs/ip-1.0.0-all.jar
+java -jar build/libs/dandelion-1.0.0-all.jar
 ```
 
 When Dandelion starts, it loads saved tasks before displaying the command prompt.
