@@ -4,6 +4,9 @@ import dandelion.task.Deadline;
 import dandelion.task.Event;
 import dandelion.task.Todo;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 /**
  * Parses user commands into application data.
  */
@@ -57,11 +60,12 @@ public class Parser {
     }
 
     /**
-     * Creates a deadline from input such as {@code deadline return book /by Sunday}.
+     * Creates a deadline from input such as {@code deadline return book /by 2019-12-02}.
      *
      * @param input Deadline command.
      * @return Parsed deadline.
-     * @throws IllegalArgumentException If the command is missing a description or deadline.
+     * @throws IllegalArgumentException If the command is missing a description or deadline,
+     *                                  or the deadline is not in {@code yyyy-MM-dd} format.
      */
     public Deadline parseDeadline(String input) {
         String content = input.substring("deadline".length()).trim();
@@ -79,7 +83,11 @@ public class Parser {
             throw new IllegalArgumentException("Both description and deadline are required.");
         }
 
-        return new Deadline(description, by);
+        try {
+            return new Deadline(description, LocalDate.parse(by));
+        } catch (DateTimeParseException exception) {
+            throw new IllegalArgumentException("Deadline must use yyyy-MM-dd format.", exception);
+        }
     }
 
     /**

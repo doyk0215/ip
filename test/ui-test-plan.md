@@ -16,7 +16,7 @@ The runner compiles the application before testing. Each expected-output line is
 
 ```text
 todo read book
-deadline return book /by Sunday
+deadline return book /by 2019-12-01
 event team meeting /from Monday 10am /to Monday 11am
 list
 mark 2
@@ -28,13 +28,13 @@ bye
 
 ```text
 added: [T][ ] read book
-added: [D][ ] return book (by: Sunday)
+added: [D][ ] return book (by: Dec 1 2019)
 added: [E][ ] team meeting (from: Monday 10am to: Monday 11am)
 1.[T][ ] read book
-2.[D][ ] return book (by: Sunday)
+2.[D][ ] return book (by: Dec 1 2019)
 3.[E][ ] team meeting (from: Monday 10am to: Monday 11am)
 Nice! I've marked this task as done:
-[D][X] return book (by: Sunday)
+[D][X] return book (by: Dec 1 2019)
 Bye, User.
 ```
 
@@ -46,7 +46,7 @@ Bye, User.
 
 ```text
 todo read book
-deadline return book /by Sunday
+deadline return book /by 2019-12-01
 event team meeting /from Monday 10am /to Monday 11am
 mark 2
 bye
@@ -63,12 +63,12 @@ bye
 
 ```text
 added: [T][ ] read book
-added: [D][ ] return book (by: Sunday)
+added: [D][ ] return book (by: Dec 1 2019)
 added: [E][ ] team meeting (from: Monday 10am to: Monday 11am)
 Nice! I've marked this task as done:
-[D][X] return book (by: Sunday)
+[D][X] return book (by: Dec 1 2019)
 1.[T][ ] read book
-2.[D][X] return book (by: Sunday)
+2.[D][X] return book (by: Dec 1 2019)
 3.[E][ ] team meeting (from: Monday 10am to: Monday 11am)
 Bye, User.
 ```
@@ -292,6 +292,26 @@ added: [T][ ] recover after event error
 Bye, User.
 ```
 
+## Test case: Reject an invalid deadline date and continue
+
+**Aim:** Verify that a deadline must use `yyyy-MM-dd` format and that the application continues afterward.
+
+**Input:**
+
+```text
+deadline return book /by Friday
+todo recover after date error
+bye
+```
+
+**Expected output:**
+
+```text
+Deadline must use yyyy-MM-dd format.
+added: [T][ ] recover after date error
+Bye, User.
+```
+
 ## Test case: Handle invalid mark and unmark arguments
 
 **Aim:** Verify that invalid task numbers produce messages and valid unmark commands still work.
@@ -325,7 +345,7 @@ Bye, User.
 
 ```text
 todo first task
-deadline second task /by Friday
+deadline second task /by 2019-12-02
 todo third task
 delete 2
 list
@@ -338,9 +358,9 @@ bye
 
 ```text
 added: [T][ ] first task
-added: [D][ ] second task (by: Friday)
+added: [D][ ] second task (by: Dec 2 2019)
 added: [T][ ] third task
-deleted: [D][ ] second task (by: Friday)
+deleted: [D][ ] second task (by: Dec 2 2019)
 Number of tasks: 2
 1.[T][ ] first task
 2.[T][ ] third task
@@ -359,7 +379,7 @@ Bye, User.
 
 ```text
 todo read book
-deadline return book /by June 6th
+deadline return book /by 2019-06-06
 todo attend class
 mark 1
 mark 2
@@ -371,13 +391,13 @@ bye
 
 ```text
 added: [T][ ] read book
-added: [D][ ] return book (by: June 6th)
+added: [D][ ] return book (by: Jun 6 2019)
 Nice! I've marked this task as done:
 Nice! I've marked this task as done:
     ____________________________________________________________
      Here are the matching tasks in your list:
      1.[T][X] read book
-     2.[D][X] return book (by: June 6th)
+     2.[D][X] return book (by: Jun 6 2019)
     ____________________________________________________________
 Bye, User.
 ```

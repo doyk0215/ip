@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +104,7 @@ public class Storage {
         }
         case "D" -> {
             validateFieldCount(fields, 4, taskType);
-            yield new Deadline(fields[2].trim(), fields[3].trim());
+            yield new Deadline(fields[2].trim(), parseDeadlineDate(fields[3].trim()));
         }
         case "E" -> {
             validateFieldCount(fields, 5, taskType);
@@ -118,6 +120,21 @@ public class Storage {
             throw new IllegalArgumentException("Saved task status must be 0 or 1.");
         }
         return task;
+    }
+
+    /**
+     * Parses a saved deadline date in ISO local-date format.
+     *
+     * @param dateText Saved deadline date.
+     * @return Parsed deadline date.
+     * @throws IllegalArgumentException If the date is not in {@code yyyy-MM-dd} format.
+     */
+    private LocalDate parseDeadlineDate(String dateText) {
+        try {
+            return LocalDate.parse(dateText);
+        } catch (DateTimeParseException exception) {
+            throw new IllegalArgumentException("Saved deadline must use yyyy-MM-dd format.", exception);
+        }
     }
 
     /**

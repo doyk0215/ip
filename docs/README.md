@@ -41,7 +41,7 @@ When Dandelion starts, it loads saved tasks before displaying the command prompt
 | Command | Format | Description |
 | --- | --- | --- |
 | `todo` | `todo DESCRIPTION` | Adds a task without a deadline or time period. |
-| `deadline` | `deadline DESCRIPTION /by DEADLINE` | Adds a task with a deadline. |
+| `deadline` | `deadline DESCRIPTION /by yyyy-MM-dd` | Adds a task with a date deadline. |
 | `event` | `event DESCRIPTION /from START /to END` | Adds a task with a time period. |
 | `list` | `list` | Displays all tasks in their current order. |
 | `mark` | `mark NUMBER` | Marks a task as done. |
@@ -56,15 +56,18 @@ Use `todo`, `deadline`, or `event` with the required arguments:
 
 ```text
 todo read book
-deadline return book /by June 6th
+deadline return book /by 2019-06-06
 event team meeting /from Monday 10am /to Monday 11am
 ```
+
+Deadline input must use `yyyy-MM-dd` format. Dandelion displays the date as
+`MMM d yyyy`.
 
 Dandelion confirms each successful addition:
 
 ```text
   bot  › added: [T][ ] read book
-  bot  › added: [D][ ] return book (by: June 6th)
+  bot  › added: [D][ ] return book (by: Jun 6 2019)
   bot  › added: [E][ ] team meeting (from: Monday 10am to: Monday 11am)
 ```
 
@@ -80,7 +83,7 @@ Example output:
 
 ```text
   bot  › 1.[T][ ] read book
-         2.[D][ ] return book (by: June 6th)
+         2.[D][ ] return book (by: Jun 6 2019)
          3.[E][ ] team meeting (from: Monday 10am to: Monday 11am)
 ```
 
@@ -130,7 +133,7 @@ Example output:
     ____________________________________________________________
      Here are the matching tasks in your list:
      1.[T][X] read book
-     2.[D][X] return book (by: June 6th)
+     2.[D][X] return book (by: Jun 6 2019)
     ____________________________________________________________
 ```
 
